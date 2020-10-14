@@ -23,8 +23,8 @@ const int BlinkErrorMs = 1000;
 const int led_rosso = 0;
 const int led_verde = 1;
 const int led_giallo = 2;
-
-const int timeMs[] = {5, 7, 3};
+//                    ros   ver    gia
+const int timeMs[] = {5000, 5000, 3000};
 bool status[] = {false, false, false};
 ///
 /// Utils
@@ -79,10 +79,7 @@ int nextStatus(int currentIndex){
             status[currentIndex]=!status[currentIndex];
             setLed(currentIndex,status[currentIndex]);
         }break;
-
     }
-
-
     //aumento l'indice per andare al prossimo stato
     currentIndex++;
     if (currentIndex>2) {
@@ -95,11 +92,11 @@ void Error()
 {
     bool onoff = true;
     while(1)
-    {    
+    {   
         //set led   	
-        setLed(led_Yellow, onoff);
+        setLed(led_giallo, onoff);
         //wait
-        Wait(BlinkErrorMs);
+        wait(BlinkErrorMs);
         onoff = !onoff;  
     } // error loop  
 }
@@ -109,19 +106,18 @@ void Error()
 int main()
 {
     init();
-    int index=0;
-    bool onoff = true;
+    int index=0;    
     unsigned int count = 0;
     while(1)
     {
         index = nextStatus(index);
-
         //Increment timer counter
         count++;
         //start error after 4 full cycle
-        if(count > 12)
+        if(count > 3)
         {
             Error();
         }
     } // main loop   
+}
 
