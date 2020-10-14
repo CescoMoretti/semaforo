@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+=======
+///
+/// NOTE On Desktop systems, compile with -D NO_PI flag
+//
+
+/*	- fare un vettore con gli stati
+	- vettore con i tempi
+	Dentro un while infinito si chiama la funzione per calcolare il prossimo stato:
+	1. prende in input lo stato attuale
+	2. guarda lo stato attuale e lo posizione nel vettore
+	3. restituisce il numero in millisecondi (ogni timer è diverso)
+	4. con quelli richiami lo speep e cambi lo stato dopo
+*/
+
+>>>>>>> 57cf8def9997a115b44e43b6f3c3c0f4fda7d085
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -73,6 +89,7 @@ int nextStatus(int currentIndex){
     return currentIndex;
 }
 
+<<<<<<< HEAD
 int main()
 {
     //chiamo la funzione fondamentale all'interno di un loop infinito
@@ -80,6 +97,32 @@ int main()
     int index=0;
     while(1){
         index = nextStatus(index);
+=======
+
+
+//TODO funzione errore (lampeggio)
+int main()
+{
+    init();   
+    bool onoff = true;
+    unsigned int count = 0;
+    while(1)
+    {       	
+        cout << "Current value is " << count << endl;        
+        setLed(led_Blue, onoff);
+        onoff = !onoff;
+
+        //Increment timer counter
+        count++;
+        //TODO togliere sleep
+        
+        /*#ifndef NO_PI
+                usleep(timeoutMs *1000);
+        #else
+                Sleep(timeoutMs);
+        #endif*/
+        
+>>>>>>> 57cf8def9997a115b44e43b6f3c3c0f4fda7d085
     } // main loop
 
     return 0;
