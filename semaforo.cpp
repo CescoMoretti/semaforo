@@ -20,9 +20,11 @@ using namespace std;
 /// Configuration
 ///
 const int led_Blue = 0;
+const int led_Yellow = 1;
 //TODO aggiungere altri led
+const int BlinkErrorMs = 1000;
 const int timeoutMs = 1000; // 1 second
-//TODO vettore stati
+//TODO vettore stati aggiungere
 
 ///
 /// Utils
@@ -44,14 +46,32 @@ void setLed(int ledNumber, bool value) //TODO implementare sleep
     #endif
 // int attesaMs[3]={5,10,5};
 /* #ifndef NO_PI
-                usleep(attesaMs[lednumebr] *1000);
-        #else
-                Sleep(attesaMs[lednumebr]);
-        #endif
+        usleep(attesaMs[lednumebr] *1000);
+    #else
+        Sleep(attesaMs[lednumebr]);
+    #endif
  */
 }
-
-//TODO funzione errore (lampeggio)
+void Error()
+{
+    bool onoff = true;
+    while(1)
+    {    
+        //set led   	
+        #ifndef NO_PI
+            digitalWrite(led_Yellow, onoff);
+        #else
+            cout << "Setting led " << led_Yellow << " to " << (onoff ? "ON" : "OFF") << endl;
+        #endif
+        //wait
+        #ifndef NO_PI
+                usleep(BlinkErrorMs *1000);
+        #else
+                Sleep(BlinkErrorMs);
+        #endif
+        onoff = !onoff;  
+    } // error loop  
+}
 int main()
 {
     init();   
@@ -65,13 +85,12 @@ int main()
 
         //Increment timer counter
         count++;
-        //TODO togliere sleep
-        #ifndef NO_PI
-                usleep(timeoutMs *1000);
-        #else
-                Sleep(timeoutMs);
-        #endif
-    } // main loop
+        //start error after 4 full cycle
+        if(count == 12)
+        {
+            Error();
+        }
 
+    } // main loop   
     return 0;
 }
