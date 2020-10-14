@@ -44,13 +44,14 @@ void setLed(int ledNumber, bool value) //TODO implementare sleep
     #else
         cout << "Setting led " << ledNumber << " to " << (value ? "ON" : "OFF") << endl;
     #endif
-// int attesaMs[3]={5,10,5};
-/* #ifndef NO_PI
-        usleep(attesaMs[lednumebr] *1000);
+}
+void Wait(int TimeMs)
+{
+    #ifndef NO_PI
+        usleep(TimeMs *1000);
     #else
-        Sleep(attesaMs[lednumebr]);
+        Sleep(TimeMs);
     #endif
- */
 }
 void Error()
 {
@@ -58,17 +59,9 @@ void Error()
     while(1)
     {    
         //set led   	
-        #ifndef NO_PI
-            digitalWrite(led_Yellow, onoff);
-        #else
-            cout << "Setting led " << led_Yellow << " to " << (onoff ? "ON" : "OFF") << endl;
-        #endif
+        setLed(led_Yellow, onoff);
         //wait
-        #ifndef NO_PI
-                usleep(BlinkErrorMs *1000);
-        #else
-                Sleep(BlinkErrorMs);
-        #endif
+        Wait(BlinkErrorMs);
         onoff = !onoff;  
     } // error loop  
 }
@@ -86,7 +79,7 @@ int main()
         //Increment timer counter
         count++;
         //start error after 4 full cycle
-        if(count == 12)
+        if(count > 12)
         {
             Error();
         }
