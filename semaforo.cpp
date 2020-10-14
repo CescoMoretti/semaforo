@@ -114,7 +114,7 @@ int main()
         index = nextStatus(index);
         //Increment timer counter
         count++;
-        //start error after 4 full cycle
+        //start error after 2 full cycle
         if(count > 6)
         {
             Error();
