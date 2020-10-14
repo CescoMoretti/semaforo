@@ -57,6 +57,7 @@ void wait(int TimeMs)
 }
 ///
 /// Function
+///
 //funzione principale e fondamentale
 int nextStatus(int currentIndex){
     //prendo il tempo che dovrò aspettare
@@ -87,7 +88,7 @@ int nextStatus(int currentIndex){
     }
     return currentIndex;
 }
-///
+
 void Error()
 {
     bool onoff = true;
