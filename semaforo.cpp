@@ -53,6 +53,9 @@ void Wait(int TimeMs)
         Sleep(TimeMs);
     #endif
 }
+///
+/// Function
+///
 void Error()
 {
     bool onoff = true;
@@ -65,6 +68,9 @@ void Error()
         onoff = !onoff;  
     } // error loop  
 }
+///
+///Main cycle
+///
 int main()
 {
     init();   
@@ -83,7 +89,6 @@ int main()
         {
             Error();
         }
-
     } // main loop   
     return 0;
 }
