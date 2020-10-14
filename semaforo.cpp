@@ -114,7 +114,7 @@ int main()
         //Increment timer counter
         count++;
         //start error after 4 full cycle
-        if(count > 3)
+        if(count > 6)
         {
             Error();
         }
