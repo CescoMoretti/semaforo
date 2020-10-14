@@ -1,7 +1,3 @@
-///
-/// NOTE On Desktop systems, compile with -D NO_PI flag
-//
-
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -19,13 +15,17 @@ using namespace std;
 ///
 /// Configuration
 ///
-const int led_Blue = 0;
-const int led_Yellow = 1;
-//TODO aggiungere altri led
-const int BlinkErrorMs = 1000;
-const int timeoutMs = 1000; // 1 second
-//TODO vettore stati aggiungere
 
+const int BlinkErrorMs = 1000;
+
+//faccio il setup delle porte dei led, del vettore con i tempi e dello stato dei led se sono accesi o spenti
+//rosso->verde->giallo
+const int led_rosso = 0;
+const int led_verde = 1;
+const int led_giallo = 2;
+
+const int timeMs[] = {5, 7, 3};
+bool status[] = {false, false, false};
 ///
 /// Utils
 ///
@@ -33,11 +33,13 @@ void init()
 {
 #ifndef NO_PI
     wiringPiSetup();
-    pinMode(led_Blue, OUTPUT);
+    pinMode(led_rosso, OUTPUT);
+    pinMode(led_verde, OUTPUT);
+    pinMode(led_giallo, OUTPUT);
 #endif
 }
 
-void setLed(int ledNumber, bool value) //TODO implementare sleep
+void setLed(int ledNumber, bool value)
 {
     #ifndef NO_PI
         digitalWrite(ledNumber, value);
@@ -45,7 +47,7 @@ void setLed(int ledNumber, bool value) //TODO implementare sleep
         cout << "Setting led " << ledNumber << " to " << (value ? "ON" : "OFF") << endl;
     #endif
 }
-void Wait(int TimeMs)
+void wait(int TimeMs)
 {
     #ifndef NO_PI
         usleep(TimeMs *1000);
@@ -55,6 +57,39 @@ void Wait(int TimeMs)
 }
 ///
 /// Function
+//funzione principale e fondamentale
+int nextStatus(int currentIndex){
+    //prendo il tempo che dovrò aspettare
+    int specificMs = timeMs[currentIndex];
+    //cambio lo stato del led, e lo accendo di conseguenza
+    status[currentIndex]=!status[currentIndex];
+    setLed(currentIndex,status[currentIndex]);
+
+    //aspetto il tempo indicato
+    wait(specificMs);
+    //spengo i led giusti in base al tipo di semaforo
+    switch (currentIndex) {
+        case 0:{
+            status[currentIndex]=!status[currentIndex];
+            setLed(currentIndex,status[currentIndex]);
+        }break;
+        case 2:{
+            status[currentIndex-1]=!status[currentIndex-1];
+            setLed(currentIndex-1,status[currentIndex-1]);
+            status[currentIndex]=!status[currentIndex];
+            setLed(currentIndex,status[currentIndex]);
+        }break;
+
+    }
+
+
+    //aumento l'indice per andare al prossimo stato
+    currentIndex++;
+    if (currentIndex>2) {
+        currentIndex = 0;
+    }
+    return currentIndex;
+}
 ///
 void Error()
 {
@@ -73,14 +108,13 @@ void Error()
 ///
 int main()
 {
-    init();   
+    init();
+    int index=0;
     bool onoff = true;
     unsigned int count = 0;
     while(1)
-    {       	
-        cout << "Current value is " << count << endl;        
-        setLed(led_Blue, onoff);
-        onoff = !onoff;
+    {
+        index = nextStatus(index);
 
         //Increment timer counter
         count++;
@@ -90,5 +124,4 @@ int main()
             Error();
         }
     } // main loop   
-    return 0;
-}
+
