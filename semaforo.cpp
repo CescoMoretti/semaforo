@@ -20,7 +20,9 @@ using namespace std;
 /// Configuration
 ///
 const int led_Blue = 0;
+//TODO aggiungere altri led
 const int timeoutMs = 1000; // 1 second
+//TODO vettore stati
 
 ///
 /// Utils
@@ -33,41 +35,42 @@ void init()
 #endif
 }
 
-void setLed(int ledNumber, bool value)
+void setLed(int ledNumber, bool value) //TODO implementare sleep
 {
-#ifndef NO_PI
-    digitalWrite(ledNumber, value);
-#else
-    cout << "Setting led " << ledNumber << " to " << (value ? "ON" : "OFF") << endl;
-#endif
+    #ifndef NO_PI
+        digitalWrite(ledNumber, value);
+    #else
+        cout << "Setting led " << ledNumber << " to " << (value ? "ON" : "OFF") << endl;
+    #endif
+// int attesaMs[3]={5,10,5};
+/* #ifndef NO_PI
+                usleep(attesaMs[lednumebr] *1000);
+        #else
+                Sleep(attesaMs[lednumebr]);
+        #endif
+ */
 }
 
+//TODO funzione errore (lampeggio)
 int main()
 {
-    init();
-
-    // Ok, inited. Now do your work...
-
+    init();   
     bool onoff = true;
     unsigned int count = 0;
-
     while(1)
-    {
-       	// We can now add our custom logics here
-	    /////
-        cout << "Current value is " << count << endl;
-
-        // If this led blinks, then the loop is working
+    {       	
+        cout << "Current value is " << count << endl;        
         setLed(led_Blue, onoff);
         onoff = !onoff;
 
-        // Increment timer counter
+        //Increment timer counter
         count++;
-#ifndef NO_PI
-        delay(timeoutMs);
-#else
-        usleep(timeoutMs * 1000);
-#endif
+        //TODO togliere sleep
+        #ifndef NO_PI
+                usleep(timeoutMs *1000);
+        #else
+                Sleep(timeoutMs);
+        #endif
     } // main loop
 
     return 0;
