@@ -54,7 +54,7 @@ int nextStatus(int currentIndex){
 
 //aspetto il tempo indicato
 #ifndef NO_PI
-    usleep(specificMs *1000);
+    delay(specificMs *1000);
 #else
     Sleep(specificMs);
     cout << "sto aspettando "<< specificMs*1000<< " millisecondi"<< endl;
