@@ -1,0 +1,68 @@
+FUNCTION_BLOCK NormalCycle
+VAR_OUTPUT
+	Red: BOOL := FALSE;
+	Yellow: BOOL := FALSE;
+	Green: BOOL := FALSE;
+END_VAR
+VAR	
+	CounterR: TIME := T#3S;
+	CounterY: TIME := T#5S;
+	CounterG: TIME := T#4S;
+	count: REAL := 0;	
+	Wait: TON;
+END_VAR
+
+VAR_INPUT
+	Tick: BOOL := FALSE;
+END_VAR
+------------------------------------------------------
+IF Tick = TRUE THEN
+	CASE count OF
+	0: //init
+		count := count + 1;
+
+	1: // Red
+   
+		Red := TRUE;
+		Green := FALSE;
+     	Yellow := FALSE;
+     
+		wait(IN:=TRUE, PT:=CounterR);
+		
+		IF wait.Q THEN
+			wait(IN:=FALSE);
+			count := count + 1;
+		END_IF;
+
+  	 2: // Green 
+   		
+   		Red := FALSE;
+		Green := TRUE;
+     	Yellow := FALSE;
+     
+     	wait(IN:=TRUE, PT:=CounterG);
+	
+		IF wait.Q THEN
+			wait(IN:=FALSE);
+			count := count + 1;
+		END_IF;
+
+   	3:  // Green and Yellow
+
+		Red := FALSE;
+		Green := TRUE;
+     	Yellow := TRUE;
+     
+     	wait(IN:=TRUE, PT:=CounterY);
+     		
+     	IF wait.Q THEN
+     		wait(IN:=FALSE);
+     		count := count + 1;
+     	END_IF;
+      
+   		
+		ELSE
+		count := 0;
+
+END_CASE;
+END_IF
